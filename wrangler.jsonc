@@ -1,0 +1,32 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "7labs-org",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-06-03",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "analytics_engine_datasets": [
+    {
+      "binding": "EVENTS",
+      "dataset": "seven_labs_events"
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "7labs.org",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.7labs.org",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

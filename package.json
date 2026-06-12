@@ -1,0 +1,37 @@
+{
+  "name": "7labs-ai-workbench-english",
+  "version": "0.1.0",
+  "private": true,
+  "description": "English-first AI tools workbench MVP for 7labs.org",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "npm run test:unit",
+    "test:unit": "tsx --test tests/*.test.ts",
+    "test:e2e": "playwright test",
+    "smoke:prod": "node scripts/smoke-prod.mjs",
+    "typecheck": "tsc --noEmit",
+    "typecheck:source": "tsc --noEmit --incremental false",
+    "validate:static": "node scripts/validate-static.mjs",
+    "validate:prod": "npm run validate:static && npm run test:unit && NEXT_TELEMETRY_DISABLED=1 npm run build && npm run typecheck:source"
+  },
+  "dependencies": {
+    "next": "^16.2.6",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
+  "devDependencies": {
+    "@opennextjs/cloudflare": "^1.19.11",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "tsx": "^4.22.4",
+    "typescript": "^5.7.0",
+    "wrangler": "^4.97.0"
+  },
+  "overrides": {
+    "postcss": "8.5.10"
+  }
+}
