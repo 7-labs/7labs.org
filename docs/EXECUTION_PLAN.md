@@ -61,7 +61,7 @@ Goal: the app serves production traffic at `https://7labs.org` with Search Conso
 
 ### Owner tasks (humans only — Codex must NOT attempt these)
 
-- O0.1 Confirm ownership of `7labs.org`. As of 2026-06-03 the domain 302-redirects to a Dynadot for-sale page with `dyna-ns.net` nameservers. If the domain is not actually owned, STOP: every SEO task in this plan assumes this exact domain.
+- O0.1 Confirm ownership of `7labs.org`. As of 2026-06-15 the domain still 302-redirects to a Dynadot for-sale page with `dyna-ns.net` nameservers. If the domain is not actually owned, STOP: every SEO task in this plan assumes this exact domain.
 - O0.2 Move the domain onto a Cloudflare zone (change nameservers at the registrar).
 - O0.3 Provide Wrangler auth in the deploy runtime (`CLOUDFLARE_API_TOKEN` or `wrangler login`), verify with `npx --no-install wrangler whoami`.
 - O0.4 After first deploy: create Google Search Console + Bing Webmaster properties (DNS TXT verification), submit `https://7labs.org/sitemap.xml`.
@@ -329,8 +329,8 @@ Listed so Codex never "helpfully" starts them:
 | T4.1–T4.3 | implemented and committed; owner GitHub setup still pending | 2026-06-12 | Initialized git, tightened `.gitignore` for `.env*` with `.env.example` exception, staged only repo files, scanned staged content before commit, and created initial commit `WP-4: add CI and E2E smoke`. Added `.github/workflows/validate.yml` for PR/main validation plus OpenNext preview E2E, `.github/workflows/deploy.yml` gated on successful Validate workflow runs on main, `playwright.config.ts`, and 7 Playwright smoke journeys. Added `@playwright/test` dev dependency and `npm run test:e2e`. Validation: local `npm run validate:static` pass; workflow YAML parse pass (`actionlint` not installed); OpenClaw `npm ci && npm run validate:prod` pass; final OpenClaw `npm run validate:prod` pass with 22 tests, 113 static pages, typecheck pass; `./deploy.sh cf-build` pass; `wrangler deploy --dry-run` pass with `EVENTS` + `ASSETS`. E2E against OpenNext preview passed twice consecutively: 7/7, then 7/7. |
 | T5.x | GATED | | awaiting owner go + WP-1 data |
 | T6.x | GATED | | awaiting owner provider choice |
-| O0.1 domain | **BLOCKER** | 2026-06-03 probe | 7labs.org parked at Dynadot |
-| O0.3 wrangler auth | **BLOCKER** | 2026-06-03 | auth preflight fails |
+| O0.1 domain | **BLOCKER** | 2026-06-15 probe | `7labs.org` still parked at Dynadot: NS `ns1.dyna-ns.net` / `ns2.dyna-ns.net`, A `198.18.2.234`, HTTPS 302 to `https://forsale.dynadot.com/7labs.org?drefid=2071` |
+| O0.3 wrangler auth | **BLOCKER** | 2026-06-15 preflight | `deploy-readiness-preflight.py` verdict `blocked`: no usable Cloudflare deploy auth path proven; GitHub repo/secret also not proven in this handoff |
 
 ## 12. Risk register
 

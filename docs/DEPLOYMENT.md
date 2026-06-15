@@ -79,7 +79,7 @@ Expected:
 - Canonical URLs use `https://7labs.org`.
 - `https://www.7labs.org/*` returns a permanent redirect to the matching apex URL.
 
-Current read-only probe on June 3, 2026 showed `https://7labs.org` redirecting to Dynadot's for-sale page. DNS/registrar routing must be fixed before SEO launch validation can pass.
+Current read-only probe on June 15, 2026 confirmed `https://7labs.org` still redirects to Dynadot's for-sale page, with nameservers `ns1.dyna-ns.net` and `ns2.dyna-ns.net` and A record `198.18.2.234`. DNS/registrar routing must be fixed before SEO launch validation can pass. Future unblock work should start from `PROJECT_STATE.md` and `ops/current-state.json`.
 
 ## 5. Launch checklist
 
