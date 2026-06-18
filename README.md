@@ -122,7 +122,7 @@ npm ci --ignore-scripts --no-audit --registry=https://registry.npmjs.org
 
 The deploy script uses `npx --no-install`, so it requires `@opennextjs/cloudflare` and `wrangler` from the project dependencies and fails instead of silently installing packages during deployment. `cf-deploy` and `cf-logs` also require Wrangler authentication through `CLOUDFLARE_API_TOKEN` or an interactive `wrangler login`.
 
-Current production-domain preflight on June 3, 2026 showed `https://7labs.org` redirecting to a Dynadot for-sale page with `dyna-ns.net` nameservers. Fix DNS/registrar routing before submitting Search Console or treating production SEO validation as complete.
+Production is live on Cloudflare. As of June 18, 2026, `https://7labs.org` returns `200`, the GitHub Actions deploy workflow is green, and `www.7labs.org` redirects to the apex domain.
 
 ## Project structure
 

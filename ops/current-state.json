@@ -1,27 +1,26 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-06-15",
+  "updatedAt": "2026-06-18",
   "projectName": "7labs-ai-workbench-english",
   "git": {
-    "head": "f1ccfa4"
+    "head": "3e4d934"
   },
   "domain": {
-    "status": "parked_at_dynadot",
+    "status": "live_on_cloudflare",
     "nameservers": [
-      "ns1.dyna-ns.net",
-      "ns2.dyna-ns.net"
+      "raegan.ns.cloudflare.com",
+      "simon.ns.cloudflare.com"
     ],
     "aRecord": "198.18.2.234",
-    "httpsRedirect": "https://forsale.dynadot.com/7labs.org?drefid=2071"
+    "httpsStatus": 200,
+    "wwwRedirect": "https://7labs.org/tools/regex-generator?smoke=1"
   },
   "deploy": {
-    "verdict": "blocked",
-    "blockers": [
-      "domain_not_on_cloudflare",
-      "cloudflare_auth_not_proven",
-      "github_repo_not_proven",
-      "github_secret_not_proven"
-    ]
+    "verdict": "live",
+    "blockers": [],
+    "repo": "7-labs/7labs.org",
+    "validateRunId": 27747156825,
+    "deployRunId": 27747272632
   },
   "gates": {
     "wp5": "closed",
