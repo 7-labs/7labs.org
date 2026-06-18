@@ -121,7 +121,7 @@ ANALYTICS_PROVIDER=workers-analytics
 NEXT_PUBLIC_ANALYTICS_ENABLED=true
 ```
 
-The Worker binding is `EVENTS`, backed by the `seven_labs_events` dataset in `wrangler.jsonc`. Workers Analytics Engine creates the dataset automatically after the first write from a deployed Worker with the binding configured.
+The Worker event sink is optional. Keep `ANALYTICS_PROVIDER=none` and ship without an `EVENTS` binding until the Cloudflare account has Workers Analytics Engine enabled. After that, add an `analytics_engine_datasets` binding named `EVENTS` in `wrangler.jsonc`; Workers Analytics Engine creates the dataset automatically after the first write from a deployed Worker with the binding configured.
 
 Cloudflare Web Analytics pageviews are separately gated by:
 

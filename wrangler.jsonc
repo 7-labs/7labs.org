@@ -10,12 +10,6 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
-  "analytics_engine_datasets": [
-    {
-      "binding": "EVENTS",
-      "dataset": "seven_labs_events"
-    }
-  ],
   "routes": [
     {
       "pattern": "7labs.org",

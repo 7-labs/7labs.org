@@ -7,6 +7,8 @@
 
 Both are disabled in the repo defaults.
 
+The default `wrangler.jsonc` does not declare an `EVENTS` binding. Add the Workers Analytics Engine dataset binding only after the Cloudflare account has Analytics Engine enabled; otherwise Cloudflare rejects the entire Worker deploy before the site can launch.
+
 ## Event Taxonomy
 
 | Event | Meaning |

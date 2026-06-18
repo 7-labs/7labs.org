@@ -265,8 +265,6 @@ const wranglerConfig = read("wrangler.jsonc");
 if (!wranglerConfig.includes('"main": ".open-next/worker.js"')) fail("wrangler.jsonc must point to .open-next/worker.js");
 if (!wranglerConfig.includes('"directory": ".open-next/assets"')) fail("wrangler.jsonc must point assets to .open-next/assets");
 if (!wranglerConfig.includes('"nodejs_compat"')) fail("wrangler.jsonc must enable nodejs_compat");
-if (!wranglerConfig.includes('"binding": "EVENTS"')) fail("wrangler.jsonc must bind Workers Analytics Engine as EVENTS");
-if (!wranglerConfig.includes('"dataset": "seven_labs_events"')) fail("wrangler.jsonc must use the seven_labs_events Analytics Engine dataset");
 const headers = read("public/_headers");
 if (!headers.includes("/_next/static/*")) fail("public/_headers must cache Next static assets");
 if (!headers.includes("max-age=31536000")) fail("public/_headers must set long-lived static asset cache");
