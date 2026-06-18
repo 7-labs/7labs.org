@@ -4,6 +4,7 @@ node_modules
 out
 .env*
 !.env.example
+local.env.txt
 .DS_Store
 .vercel
 .wrangler

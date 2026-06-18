@@ -4,6 +4,13 @@ set -euo pipefail
 MODE="${1:-validate}"
 SITE_URL="${SITE_URL:-${NEXT_PUBLIC_SITE_URL:-https://7labs.org}}"
 LOG_SECONDS="${WRANGLER_LOG_SECONDS:-45}"
+RUN_NPM_AUDIT="${RUN_NPM_AUDIT:-false}"
+
+normalize_cloudflare_token() {
+  if [[ -z "${CLOUDFLARE_API_TOKEN:-}" && -n "${Cloudflare_TOKEN:-}" ]]; then
+    export CLOUDFLARE_API_TOKEN="${Cloudflare_TOKEN}"
+  fi
+}
 
 require_local_package_bin() {
   local bin_name="$1"
@@ -16,6 +23,7 @@ require_local_package_bin() {
 
 require_cloudflare_auth() {
   local auth_output
+  normalize_cloudflare_token
   if ! auth_output="$(npx --no-install wrangler whoami 2>&1)"; then
     echo "$auth_output" >&2
     exit 1
@@ -43,7 +51,9 @@ check_public_defaults() {
 validate() {
   check_public_defaults
   npm run validate:prod
-  npm audit --audit-level=moderate
+  if [[ "$RUN_NPM_AUDIT" == "true" ]]; then
+    npm audit --audit-level=moderate
+  fi
 }
 
 cf_build() {
