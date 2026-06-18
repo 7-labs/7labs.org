@@ -47,7 +47,7 @@ The OpenNext adapter config lives in `open-next.config.ts`. Keep `public/_header
 
 The Worker is configured with custom-domain routes for both `7labs.org` and `www.7labs.org`. Cloudflare must have an active zone for the domain before those routes can serve traffic.
 
-`www.7labs.org` must 308-redirect to the apex domain. This is implemented in `next.config.mjs` with a host-matched permanent redirect:
+`www.7labs.org` must 308-redirect to the apex domain. This is implemented in `middleware.ts` so the redirect preserves the full pathname and query string on the Workers runtime:
 
 ```text
 https://www.7labs.org/:path* -> https://7labs.org/:path*

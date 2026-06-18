@@ -1,6 +1,7 @@
 const siteUrl = (process.env.SITE_URL || "https://7labs.org").replace(/\/$/, "");
 
 const failures = [];
+const smokePath = "/tools/regex-generator?smoke=1";
 
 function url(path) {
   return `${siteUrl}${path.startsWith("/") ? path : `/${path}`}`;
@@ -57,6 +58,26 @@ async function jsonProbe(label, path, body, check) {
   );
 }
 
+async function redirectProbe(label, origin, path, expectedLocation) {
+  let response;
+  try {
+    response = await fetch(`${origin}${path}`, { redirect: "manual" });
+  } catch (error) {
+    fail(label, `request failed: ${error instanceof Error ? error.message : String(error)}`);
+    return;
+  }
+
+  if (response.status !== 308) {
+    fail(label, `expected 308, got ${response.status}`);
+    return;
+  }
+
+  const location = response.headers.get("location");
+  if (location !== expectedLocation) {
+    fail(label, `expected location ${expectedLocation}, got ${location || "missing location"}`);
+  }
+}
+
 await textProbe("home", "/", undefined, (_response, body) => {
   if (!body.includes("<h1")) throw new Error("missing <h1");
 });
@@ -74,6 +95,12 @@ await textProbe("sitemap", "/sitemap.xml", undefined, (_response, body) => {
 await textProbe("tool page", "/tools/regex-generator", undefined, (_response, body) => {
   if (!body.includes("<h1")) throw new Error("missing <h1");
 });
+
+const site = new URL(siteUrl);
+if (!site.hostname.startsWith("www.")) {
+  const wwwOrigin = `${site.protocol}//www.${site.host}`;
+  await redirectProbe("www redirect", wwwOrigin, smokePath, `${siteUrl}${smokePath}`);
+}
 
 await jsonProbe("api ai", "/api/ai", {}, (json) => {
   if (typeof json.provider !== "string") throw new Error("missing provider");
