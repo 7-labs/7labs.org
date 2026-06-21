@@ -110,11 +110,11 @@ main { min-height: 74vh; }
   letter-spacing: 0;
 }
 .hero h1, .page-hero h1 {
-	  margin: 1rem 0;
-	  font-size: 4.25rem;
-	  line-height: .96;
-	  letter-spacing: 0;
-	}
+  margin: 1rem 0;
+  font-size: 4.25rem;
+  line-height: .96;
+  letter-spacing: 0;
+}
 .hero p, .page-hero p { color: var(--muted); font-size: 1.1rem; line-height: 1.75; max-width: 720px; }
 .mobile-copy { display: none; }
 .hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.5rem; }
@@ -571,4 +571,4 @@ input:focus, textarea:focus, select:focus { border-color: var(--primary); box-sh
   .table-lite { display: block; overflow-x: auto; white-space: normal; }
   .table-lite th, .table-lite td { min-width: 9rem; }
   .cta-band { align-items: flex-start; flex-direction: column; }
-	}
+}

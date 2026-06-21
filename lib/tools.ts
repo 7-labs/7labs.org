@@ -79,7 +79,7 @@ export const categories: Record<ToolCategory, { name: string; description: strin
   }
 };
 
-const LAST_REVIEWED = "2026-05-31";
+const LAST_REVIEWED = "2026-06-20";
 
 function detail(input: Omit<ToolLaunchDetails, "lastReviewed"> & { lastReviewed?: string }): ToolLaunchDetails {
   return {
@@ -158,7 +158,7 @@ const toolLaunchDetails: Record<string, ToolLaunchDetails> = {
     upgradePath: "Add provider-specific templates for Veo, Runway, Pika, and Kling once video demand is measured.",
     conversionGoal: "Reduce wasted video-generation retries.",
     relatedBestSlugs: ["best-ai-for-image-generation", "best-ai-for-youtube"],
-    relatedCompareSlugs: []
+    relatedCompareSlugs: ["midjourney-vs-stable-diffusion"]
   }),
   "midjourney-prompt-generator": detail({
     primaryIntent: "Translate a visual idea into Midjourney-friendly prompt structure.",
@@ -356,7 +356,7 @@ const toolLaunchDetails: Record<string, ToolLaunchDetails> = {
     upgradePath: "Add platform presets for GitHub Actions, Vercel, systemd timers, and Cloudflare Cron Triggers.",
     conversionGoal: "Serve high-intent operations searches.",
     relatedBestSlugs: ["best-ai-for-coding"],
-    relatedCompareSlugs: []
+    relatedCompareSlugs: ["cursor-vs-copilot"]
   }),
   "code-explainer": detail({
     primaryIntent: "Explain a code snippet in practical terms.",
@@ -384,7 +384,7 @@ const toolLaunchDetails: Record<string, ToolLaunchDetails> = {
     upgradePath: "Add import from fetch/OpenAPI snippets and Postman-style export.",
     conversionGoal: "Convert API debugging searches into practical developer utility usage.",
     relatedBestSlugs: ["best-ai-for-coding"],
-    relatedCompareSlugs: []
+    relatedCompareSlugs: ["cursor-vs-copilot"]
   }),
   "typescript-type-generator": detail({
     primaryIntent: "Create pragmatic TypeScript interfaces from JSON samples.",
@@ -503,7 +503,7 @@ const toolLaunchDetails: Record<string, ToolLaunchDetails> = {
     upgradePath: "Add platform-specific variants, retention tags, and performance feedback loops.",
     conversionGoal: "Capture creator traffic and push users into repeat content workflows.",
     relatedBestSlugs: ["best-ai-for-youtube", "best-ai-for-writing"],
-    relatedCompareSlugs: []
+    relatedCompareSlugs: ["chatgpt-vs-gemini"]
   }),
   "linkedin-post-generator": detail({
     primaryIntent: "Draft LinkedIn posts for professional English audiences.",
@@ -531,7 +531,7 @@ const toolLaunchDetails: Record<string, ToolLaunchDetails> = {
     upgradePath: "Add ecommerce templates, brand voice profiles, and landing-page section exports.",
     conversionGoal: "Monetize creator and ecommerce workflow demand later.",
     relatedBestSlugs: ["best-ai-for-writing", "best-ai-for-image-generation"],
-    relatedCompareSlugs: []
+    relatedCompareSlugs: ["claude-vs-chatgpt"]
   }),
   "newsletter-outline-generator": detail({
     primaryIntent: "Turn a topic into a newsletter issue structure.",

@@ -16,5 +16,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/:path*"
+  // Skip static assets, image optimizer, and metadata files so the host check
+  // only runs for real navigations instead of every Worker request.
+  matcher: "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:png|svg|ico|woff2)$).*)"
 };

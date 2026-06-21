@@ -71,6 +71,24 @@ export default async function ComparePage({ params }: ComparePageProps) {
       { name: page.right, description: page.bestForRight }
     ]
   });
+  const faqItems = [
+    { question: `Should I choose ${page.left} or ${page.right}?`, answer: page.decisionRule },
+    { question: `What is ${page.left} best for?`, answer: page.bestForLeft },
+    { question: `What is ${page.right} best for?`, answer: page.bestForRight },
+    {
+      question: "Is this comparison still accurate?",
+      answer: `${page.evidenceNotes[0] ?? "Re-check the official product pages before any paid decision."} Source links were last checked ${page.sourceLastChecked ?? page.lastReviewed}.`
+    }
+  ];
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer }
+    }))
+  };
 
   return (
     <div className="container">
@@ -85,6 +103,10 @@ export default async function ComparePage({ params }: ComparePageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(optionListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <Breadcrumbs items={[
         { label: "Home", href: "/" },
@@ -156,12 +178,21 @@ export default async function ComparePage({ params }: ComparePageProps) {
         <ul className="list">
           {page.evidenceNotes.map((note) => <li key={note}>{note}</li>)}
         </ul>
+        <h2>FAQ</h2>
+        <div className="faq-list">
+          {faqItems.map((item) => (
+            <details key={item.question}>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
         {page.sources.length > 0 ? (
           <>
             <h2>Sources</h2>
             <div className="source-grid">
               {page.sources.map((source) => (
-                <a className="source-card" href={source.url} key={source.url}>
+                <a className="source-card" href={source.url} key={source.url} target="_blank" rel="noopener nofollow">
                   <span className="pill pill-green">{source.type}</span>
                   <strong>{source.label}</strong>
                   <span>{source.purpose}</span>

@@ -60,20 +60,29 @@ export default async function ToolPage({ params }: ToolPageProps) {
     { name: "Tools", url: absoluteUrl("/tools") },
     { name: tool.name, url: toolUrl }
   ];
+  const lowerFirst = (text: string) => (text ? text.charAt(0).toLowerCase() + text.slice(1) : text);
   const faqItems = [
     {
-      question: `Is ${tool.name} free?`,
+      question: `What does the ${tool.name} do?`,
+      answer: `${tool.primaryIntent} It returns ${lowerFirst(tool.sampleOutput)}`
+    },
+    {
+      question: `Is the ${tool.name} free?`,
       answer: tool.monetization === "free"
-        ? "The current tool can be used for free and runs on local rules by default, so no API key is required."
-        : "The current tool can be tried with basic features. Long inputs, history, batch export, and premium models are good candidates for a paid tier."
+        ? "Yes. It runs on the local rule engine by default, so it is free to use and requires no API key."
+        : "You can try the core features now. Long inputs, history, batch export, and premium models are good candidates for a paid tier."
     },
     {
       question: "Does this tool call an external AI model?",
       answer: "Not by default. When AI_PROVIDER=none, the tool uses the local rule engine. Provider-backed generation should only be enabled after quotas, caching, rate limits, and spend controls are configured."
     },
     {
-      question: "How should a production version improve this?",
-      answer: "Use real usage data to upgrade the highest-frequency tools first, then add login, quotas, caching, and paid controls for long documents, long code, batch work, and premium models."
+      question: `What are the current limits of the ${tool.name}?`,
+      answer: tool.limitations.join(" ")
+    },
+    {
+      question: `How could a production version improve the ${tool.name}?`,
+      answer: tool.upgradePath
     }
   ];
   const webApplicationJsonLd = {
@@ -126,6 +135,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
       <section className="page-hero">
         <span className={`pill pill-${category.accent}`}>{category.name}</span>
         <h1>{tool.name}</h1>
+        <p className="page-lead">{tool.primaryIntent}</p>
         <p>{tool.description}</p>
         <p className="meta-line">Last reviewed: {tool.lastReviewed}. Default mode: local rules, no external model call.</p>
         <div className="hero-actions">

@@ -71,6 +71,27 @@ export default async function BestPage({ params }: BestPageProps) {
       description: `${pick.bestFor}: ${pick.why}`
     }))
   });
+  const topPick = page.picks[0];
+  const faqItems = [
+    {
+      question: "Which option is recommended first?",
+      answer: topPick ? `${topPick.name} for ${topPick.bestFor.toLowerCase()}. ${topPick.why} Caveat: ${topPick.caveat}` : page.intent
+    },
+    { question: "How should I choose between these options?", answer: page.intent },
+    {
+      question: "Are these recommendations up to date?",
+      answer: `${page.evidenceNotes[0] ?? "Recommendations are workflow-based and should be retested as tools change."} Source links were last checked ${page.sourceLastChecked ?? page.lastReviewed}.`
+    }
+  ];
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer }
+    }))
+  };
 
   return (
     <div className="container">
@@ -85,6 +106,10 @@ export default async function BestPage({ params }: BestPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pickListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <Breadcrumbs items={[
         { label: "Home", href: "/" },
@@ -138,6 +163,15 @@ export default async function BestPage({ params }: BestPageProps) {
         <ul className="list">
           {page.evidenceNotes.map((note) => <li key={note}>{note}</li>)}
         </ul>
+        <h2>FAQ</h2>
+        <div className="faq-list">
+          {faqItems.map((item) => (
+            <details key={item.question}>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
         {relatedComparisons.length > 0 ? (
           <>
             <h2>Related comparisons</h2>
@@ -153,7 +187,7 @@ export default async function BestPage({ params }: BestPageProps) {
             <h2>Sources</h2>
             <div className="source-grid">
               {page.sources.map((source) => (
-                <a className="source-card" href={source.url} key={source.url}>
+                <a className="source-card" href={source.url} key={source.url} target="_blank" rel="noopener nofollow">
                   <span className="pill pill-green">{source.type}</span>
                   <strong>{source.label}</strong>
                   <span>{source.purpose}</span>
