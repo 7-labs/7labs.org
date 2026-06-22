@@ -4,6 +4,7 @@ import { ToolGrid } from "@/components/ToolGrid";
 import { NewsletterCapture } from "@/components/NewsletterCapture";
 import { categories, tools } from "@/lib/tools";
 import { bestPages } from "@/lib/bestPages";
+import { comparePages } from "@/lib/comparePages";
 import { siteImage, siteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -53,7 +54,7 @@ export default function HomePage() {
             </div>
             <div className="trust-strip" aria-label="Launch safeguards">
               <span>No API key required</span>
-              <span>32 working tools</span>
+              <span>{tools.length} working tools</span>
               <span>English-first SEO pages</span>
             </div>
           </div>
@@ -82,7 +83,7 @@ export default function HomePage() {
         <div className="container metric-strip">
           <div className="metric"><strong>{tools.length}</strong><span>launch tools</span></div>
           <div className="metric"><strong>{bestPages.length}</strong><span>best AI guides</span></div>
-          <div className="metric"><strong>4</strong><span>comparison pages</span></div>
+          <div className="metric"><strong>{comparePages.length}</strong><span>comparison pages</span></div>
           <div className="metric"><strong>none</strong><span>default AI provider</span></div>
         </div>
       </section>
@@ -135,6 +136,28 @@ export default function HomePage() {
             {bestPages.map((page) => (
               <Link className="content-card" href={`/best/${page.slug}`} key={page.slug}>
                 <span className="pill pill-blue">Best AI for</span>
+                <h3>{page.title}</h3>
+                <p>{page.description}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <div className="section-kicker">Comparisons</div>
+              <h2>Decide between popular AI tools</h2>
+              <p>Side-by-side comparisons that map each option to the workflow it actually fits, with a clear decision rule instead of a generic feature table.</p>
+            </div>
+            <Link className="ghost-button" href="/compare">All comparisons</Link>
+          </div>
+          <div className="tool-grid">
+            {comparePages.map((page) => (
+              <Link className="content-card" href={`/compare/${page.slug}`} key={page.slug}>
+                <span className="pill pill-teal">Compare</span>
                 <h3>{page.title}</h3>
                 <p>{page.description}</p>
               </Link>
