@@ -5,6 +5,7 @@ out
 .env*
 !.env.example
 local.env.txt
+CLAUDE.md
 .DS_Store
 .vercel
 .wrangler
