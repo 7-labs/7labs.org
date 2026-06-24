@@ -86,3 +86,73 @@ describe("local tool executors", () => {
     );
   });
 });
+
+function extractFencedJson(output: string): unknown {
+  const match = output.match(/```json\n([\s\S]*?)\n```/);
+  assert.ok(match, "expected a ```json fenced block in the output");
+  return JSON.parse(match![1]);
+}
+
+function extractInlineCode(output: string, label: string): string {
+  // Matches a line like: - ISO 8601 (UTC): `2026-06-03T08:00:00.000Z`
+  const re = new RegExp(`${label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[^\`]*\`([^\`]+)\``);
+  const match = output.match(re);
+  assert.ok(match, `expected an inline-code value labelled "${label}"`);
+  return match![1];
+}
+
+describe("local tool executors — output correctness", () => {
+  it("timestamp-converter parses Unix seconds and emits the correct UTC ISO string", () => {
+    // 1780473600 is a 10-digit value, so it must be treated as Unix SECONDS.
+    // new Date(1780473600 * 1000).toISOString() === 2026-06-03T08:00:00.000Z
+    const output = executeTool("timestamp-converter", { value: "1780473600" });
+
+    assert.match(output, /parsed as a Unix seconds/, "should detect Unix seconds, not milliseconds");
+    assert.equal(extractInlineCode(output, "ISO 8601 (UTC):"), "2026-06-03T08:00:00.000Z");
+    assert.equal(extractInlineCode(output, "UTC date:"), "2026-06-03");
+    assert.equal(extractInlineCode(output, "UTC time:"), "08:00:00");
+    assert.equal(extractInlineCode(output, "Unix seconds:"), "1780473600");
+    assert.equal(extractInlineCode(output, "Unix milliseconds:"), "1780473600000");
+  });
+
+  it("json-fixer round-trips already-valid JSON", () => {
+    const input = '{"name":"7labs","active":true}';
+    const output = executeTool("json-fixer", { json: input });
+
+    assert.match(output, /^# Fixed JSON/, "valid JSON should report a successful fix, not a repair attempt");
+    const parsed = extractFencedJson(output) as { name?: string; active?: boolean };
+    assert.deepEqual(parsed, { name: "7labs", active: true });
+  });
+
+  it("json-fixer repairs unquoted keys, single quotes, and trailing commas into valid JSON", () => {
+    const output = executeTool("json-fixer", { json: "{ name: 'Acme', features: ['x',], }" });
+
+    assert.match(output, /^# Fixed JSON/, "this sample is repairable and should parse after cleanup");
+    const parsed = extractFencedJson(output) as { name?: string; features?: string[] };
+    // Quoted keys, double-quoted strings, no trailing commas — i.e. genuinely valid JSON.
+    assert.deepEqual(parsed, { name: "Acme", features: ["x"] });
+  });
+
+  it("regex-generator emits a pattern that compiles via new RegExp without throwing", () => {
+    const output = executeTool("regex-generator", { pattern: "match an email address", flavor: "javascript" });
+
+    // Pattern is rendered as `/.../` for the JavaScript flavor; strip the slash delimiters.
+    const literal = extractInlineCode(output, "## Pattern");
+    const source = literal.replace(/^\/(.*)\/$/, "$1");
+    assert.notEqual(source, "", "expected a non-empty regex source");
+    assert.doesNotThrow(() => new RegExp(source), "suggested regex must be a valid pattern");
+
+    // Sanity-check the email regex actually matches a real email and rejects junk.
+    const compiled = new RegExp(source);
+    assert.ok(compiled.test("hello@example.com"));
+    assert.equal(compiled.test("not-an-email"), false);
+  });
+
+  it("cron-generator emits the correct cron field for an every-5-minutes schedule", () => {
+    const output = executeTool("cron-generator", { schedule: "every 5 minutes", format: "standard" });
+
+    assert.match(output, /\*\/5 \* \* \* \*/, "every-5-minutes should produce */5 * * * *");
+    assert.equal(extractInlineCode(output, "# Cron Expression"), "*/5 * * * *");
+    assert.match(output, /Every 5 minutes\./);
+  });
+});

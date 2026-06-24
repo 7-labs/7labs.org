@@ -67,4 +67,15 @@ describe("/api/events", () => {
     assert.equal(response.status, 200);
     assert.equal(JSON.stringify(json).includes(rawValue), false);
   });
+
+  it("rejects newsletter signups when capture is not configured", async () => {
+    process.env.ANALYTICS_PROVIDER = "none";
+    delete process.env.NEWSLETTER_FORM_ENABLED;
+    delete process.env.NEWSLETTER_PROVIDER;
+
+    const { response, json } = await postJson({ event: "newsletter_signup", email: "a@b.com" });
+
+    assert.equal(response.status, 501);
+    assert.equal(json.code, "newsletter_not_configured");
+  });
 });

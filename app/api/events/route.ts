@@ -72,7 +72,11 @@ async function readBody(request: NextRequest): Promise<EventBody> {
     throw new Error("body-too-large");
   }
   if (!text.trim()) return {};
-  return JSON.parse(text) as EventBody;
+  const parsed = JSON.parse(text);
+  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+    throw new Error("invalid-payload");
+  }
+  return parsed as EventBody;
 }
 
 export async function POST(request: NextRequest) {

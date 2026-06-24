@@ -16,6 +16,8 @@ export type PromptPage = {
   faq: { question: string; answer: string }[];
   lastReviewed: string;
   relatedSlugs: string[];
+  relatedBestSlugs?: string[];
+  relatedCompareSlugs?: string[];
 };
 
 const sharedTips = [
@@ -35,6 +37,8 @@ export const promptPages: PromptPage[] = [
     toolSlug: "midjourney-prompt-generator",
     lastReviewed: "2026-06-12",
     relatedSlugs: ["image-prompts", "stable-diffusion-prompts", "product-photo-prompts"],
+    relatedBestSlugs: ["best-ai-for-image-generation"],
+    relatedCompareSlugs: ["midjourney-vs-stable-diffusion"],
     examples: [
       {
         label: "SaaS hero workstation",
@@ -119,6 +123,8 @@ export const promptPages: PromptPage[] = [
     toolSlug: "stable-diffusion-prompt-generator",
     lastReviewed: "2026-06-12",
     relatedSlugs: ["image-prompts", "midjourney-prompts", "product-photo-prompts"],
+    relatedBestSlugs: ["best-ai-for-image-generation"],
+    relatedCompareSlugs: ["midjourney-vs-stable-diffusion"],
     examples: [
       {
         label: "White running shoe",
@@ -213,6 +219,8 @@ export const promptPages: PromptPage[] = [
     toolSlug: "product-photo-prompt-generator",
     lastReviewed: "2026-06-12",
     relatedSlugs: ["image-prompts", "stable-diffusion-prompts", "youtube-thumbnail-prompts"],
+    relatedBestSlugs: ["best-ai-for-image-generation"],
+    relatedCompareSlugs: ["midjourney-vs-stable-diffusion"],
     examples: [
       {
         label: "Skincare hero image",
@@ -307,6 +315,8 @@ export const promptPages: PromptPage[] = [
     toolSlug: "youtube-thumbnail-prompt-generator",
     lastReviewed: "2026-06-12",
     relatedSlugs: ["image-prompts", "product-photo-prompts", "ai-video-prompts"],
+    relatedBestSlugs: ["best-ai-for-youtube", "best-ai-for-image-generation"],
+    relatedCompareSlugs: ["midjourney-vs-stable-diffusion"],
     examples: [
       {
         label: "AI tools ranking",
@@ -401,6 +411,8 @@ export const promptPages: PromptPage[] = [
     toolSlug: "video-prompt-generator",
     lastReviewed: "2026-06-12",
     relatedSlugs: ["image-prompts", "youtube-thumbnail-prompts", "product-photo-prompts"],
+    relatedBestSlugs: ["best-ai-for-image-generation", "best-ai-for-youtube"],
+    relatedCompareSlugs: ["midjourney-vs-stable-diffusion"],
     examples: [
       {
         label: "SaaS dashboard reveal",
@@ -485,6 +497,8 @@ export const promptPages: PromptPage[] = [
     toolSlug: "image-prompt-generator",
     lastReviewed: "2026-06-12",
     relatedSlugs: ["midjourney-prompts", "stable-diffusion-prompts", "product-photo-prompts"],
+    relatedBestSlugs: ["best-ai-for-image-generation"],
+    relatedCompareSlugs: ["midjourney-vs-stable-diffusion"],
     examples: [
       {
         label: "SaaS homepage hero",

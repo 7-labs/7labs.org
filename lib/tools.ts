@@ -478,13 +478,13 @@ const toolLaunchDetails: Record<string, ToolLaunchDetails> = {
     relatedCompareSlugs: ["chatgpt-vs-gemini"]
   }),
   "youtube-script-generator": detail({
-    primaryIntent: "Build a YouTube script structure from a topic and audience.",
+    primaryIntent: "Build a structured YouTube script outline from a topic and audience that you fill in with your own examples and voice.",
     exampleRuns: [{
       label: "Workflow tutorial",
       values: { topic: "How to use AI to debug production errors faster", audience: "software developers", length: "8 minutes" },
       outputPreview: "Hook, promise, outline sections, examples, retention beats, transitions, and call to action."
     }],
-    sampleOutput: "A YouTube script outline with hook, promise, sections, examples, transitions, and CTA.",
+    sampleOutput: "A ready-to-fill YouTube script framework with hook, promise, section prompts, transitions, and CTA placeholders you complete with your own examples and voice.",
     limitations: ["Does not know your audience retention data.", "Final script needs voice and examples.", "No YouTube API integration in the MVP."],
     upgradePath: "Add title/thumbnail pairing, retention checkpoints, and Shorts repurposing.",
     conversionGoal: "Anchor Creator Lab as a repeat creator workflow.",
@@ -492,13 +492,13 @@ const toolLaunchDetails: Record<string, ToolLaunchDetails> = {
     relatedCompareSlugs: ["chatgpt-vs-gemini"]
   }),
   "tiktok-hook-generator": detail({
-    primaryIntent: "Generate short-form video hooks with stakes and fast openers.",
+    primaryIntent: "Get short-form hook structures with stakes and fast-opener angles you tailor to your own story.",
     exampleRuns: [{
       label: "Founder lesson",
       values: { topic: "I wasted a week picking the wrong AI tool stack", audience: "indie hackers", style: "curiosity" },
       outputPreview: "Hook variants using curiosity, contrast, mistake framing, and fast payoff language."
     }],
-    sampleOutput: "A set of short-form hooks with angle, opening line, why it works, and CTA notes.",
+    sampleOutput: "A set of starter short-form hook templates with angle, opening line, why it works, and CTA notes you adapt to your own specifics.",
     limitations: ["Hook performance must be tested with real viewers.", "Platform trends change quickly.", "The MVP does not publish or analyze videos."],
     upgradePath: "Add platform-specific variants, retention tags, and performance feedback loops.",
     conversionGoal: "Capture creator traffic and push users into repeat content workflows.",
@@ -506,13 +506,13 @@ const toolLaunchDetails: Record<string, ToolLaunchDetails> = {
     relatedCompareSlugs: ["chatgpt-vs-gemini"]
   }),
   "linkedin-post-generator": detail({
-    primaryIntent: "Draft LinkedIn posts for professional English audiences.",
+    primaryIntent: "Get a ready-to-fill LinkedIn post structure for professional English audiences that you complete with your specifics.",
     exampleRuns: [{
       label: "Product launch post",
       values: { idea: "We launched a free AI tool finder for creators and developers.", tone: "insightful" },
       outputPreview: "Hook options, a formatted post body, an engagement question, and formatting tips."
     }],
-    sampleOutput: "A LinkedIn post draft with hook options, body, lesson, engagement question, and formatting tips.",
+    sampleOutput: "A LinkedIn post structure with hook options, a body framework, lesson prompt, engagement question, and formatting tips you complete with your specifics.",
     limitations: ["Best performance requires personal voice and real proof.", "Over-polished AI posts can look generic.", "No LinkedIn publishing integration in the MVP."],
     upgradePath: "Add voice profiles, saved post formats, and performance tracking.",
     conversionGoal: "Support B2B creator and founder acquisition channels.",
@@ -520,13 +520,13 @@ const toolLaunchDetails: Record<string, ToolLaunchDetails> = {
     relatedCompareSlugs: ["claude-vs-chatgpt", "chatgpt-vs-gemini"]
   }),
   "product-description-generator": detail({
-    primaryIntent: "Convert product features into benefits, product-page copy, and ad angles.",
+    primaryIntent: "Turn product features into a benefit-led copy framework with product-page structure and ad angles you finish with your specifics.",
     exampleRuns: [{
       label: "SaaS product page",
       values: { product: "AI meeting notes app", features: "records calls, extracts action items, syncs with Slack", audience: "busy startup teams" },
       outputPreview: "Positioning, benefit bullets, product description, ad angles, and CTA options."
     }],
-    sampleOutput: "Product copy with positioning, benefits, bullets, ad angles, and CTA suggestions.",
+    sampleOutput: "A product copy framework with positioning, benefit bullets, ad angles, and CTA suggestions you finish with your specifics.",
     limitations: ["Does not verify product claims.", "Compliance-sensitive products need review.", "Conversion rate depends on offer, proof, and audience fit."],
     upgradePath: "Add ecommerce templates, brand voice profiles, and landing-page section exports.",
     conversionGoal: "Monetize creator and ecommerce workflow demand later.",
@@ -534,13 +534,13 @@ const toolLaunchDetails: Record<string, ToolLaunchDetails> = {
     relatedCompareSlugs: ["claude-vs-chatgpt"]
   }),
   "newsletter-outline-generator": detail({
-    primaryIntent: "Turn a topic into a newsletter issue structure.",
+    primaryIntent: "Turn a topic into a ready-to-fill newsletter issue structure you complete with your own content.",
     exampleRuns: [{
       label: "AI tools roundup",
       values: { topic: "5 AI workflows that saved my team time this week", audience: "founders and marketers" },
       outputPreview: "Subject lines, opener, sections, examples to add, CTA, and link placeholders."
     }],
-    sampleOutput: "A newsletter outline with subject lines, intro, sections, proof points, links to add, and CTA.",
+    sampleOutput: "A ready-to-fill newsletter outline with subject line options, intro, section prompts, proof-point placeholders, links to add, and CTA you complete with your own content.",
     limitations: ["Does not write from live sources.", "Links and claims need manual verification.", "Final voice should match the sender."],
     upgradePath: "Add source collection, saved issue templates, and email platform export.",
     conversionGoal: "Build repeat writing workflows and future newsletter capture.",
@@ -585,7 +585,7 @@ const baseTools: BaseToolDefinition[] = ([
     category: "finder",
     priority: 100,
     description: "A task-first AI tool recommender for English-speaking users. It maps your goal, budget, and workflow to tools, trade-offs, and a copy-ready prompt.",
-    keywords: ["AI tool finder", "best AI tools", "best AI for", "AI tool recommendations", "AI workflow"],
+    keywords: ["AI tool finder", "best AI tools", "AI tool recommendations", "AI workflow"],
     fields: [
       { name: "task", label: "What do you want to accomplish?", type: "textarea", required: true, placeholder: "Example: I need a low-cost AI stack for creating YouTube thumbnails and short-form video scripts." },
       { name: "budget", label: "Budget", type: "select", defaultValue: "free", options: [
@@ -613,7 +613,7 @@ const baseTools: BaseToolDefinition[] = ([
     category: "finder",
     priority: 96,
     description: "Generate a decision-oriented comparison table with strengths, limitations, best-fit tasks, and a recommended workflow.",
-    keywords: ["compare AI tools", "AI tools comparison", "ChatGPT vs Gemini", "Claude vs ChatGPT"],
+    keywords: ["compare AI tools", "AI tools comparison"],
     fields: [
       { name: "tools", label: "Tools to compare", type: "text", required: true, placeholder: "Example: ChatGPT, Claude, Gemini" },
       { name: "task", label: "Decision context", type: "textarea", required: true, placeholder: "Example: I need to summarize long PDFs and draft client-ready reports." },
@@ -632,7 +632,7 @@ const baseTools: BaseToolDefinition[] = ([
     category: "prompt",
     priority: 98,
     description: "Create structured English prompts for Midjourney, Stable Diffusion, Gemini, DALL·E, and other image models. Includes subject, composition, lighting, style, and negative prompts.",
-    keywords: ["AI image prompt generator", "image prompt", "Midjourney prompt", "Stable Diffusion prompt"],
+    keywords: ["AI image prompt generator", "image prompt"],
     fields: [
       { name: "subject", label: "Main subject", type: "text", required: true, placeholder: "Example: a futuristic coffee maker on a marble kitchen counter" },
       { name: "style", label: "Visual style", type: "select", defaultValue: "cinematic", options: [
@@ -1140,10 +1140,10 @@ const baseTools: BaseToolDefinition[] = ([
   {
     slug: "youtube-script-generator",
     name: "YouTube Script Generator",
-    tagline: "Create a structured video script from a topic.",
+    tagline: "Get a structured video script outline you fill in with your own examples.",
     category: "creator",
     priority: 80,
-    description: "Generate a YouTube script outline with hook, promise, sections, examples, transitions, and call-to-action.",
+    description: "Generate a ready-to-fill YouTube script framework with hook, promise, section prompts, transitions, and a call-to-action that you complete with your own examples and voice.",
     keywords: ["YouTube script generator", "AI video script", "creator script"],
     fields: [
       { name: "topic", label: "Video topic", type: "text", required: true, placeholder: "Example: The best AI tools for freelancers in 2026" },
@@ -1163,10 +1163,10 @@ const baseTools: BaseToolDefinition[] = ([
   {
     slug: "tiktok-hook-generator",
     name: "TikTok Hook Generator",
-    tagline: "Generate punchy hooks for short-form videos.",
+    tagline: "Get punchy hook templates for short-form videos you tailor to your story.",
     category: "creator",
     priority: 78,
-    description: "Create short-form video hooks with curiosity, contrast, stakes, and fast openers for TikTok, Reels, and Shorts.",
+    description: "Generate starter short-form hook templates using curiosity, contrast, stakes, and fast openers for TikTok, Reels, and Shorts that you adapt to your own specifics.",
     keywords: ["TikTok hook generator", "short video hooks", "Reels hook", "YouTube Shorts hook"],
     fields: [
       { name: "topic", label: "Topic", type: "text", required: true, placeholder: "Example: AI tools that save 10 hours per week" },
@@ -1186,10 +1186,10 @@ const baseTools: BaseToolDefinition[] = ([
   {
     slug: "linkedin-post-generator",
     name: "LinkedIn Post Generator",
-    tagline: "Turn an idea into a professional LinkedIn post.",
+    tagline: "Turn an idea into a ready-to-fill LinkedIn post structure.",
     category: "creator",
     priority: 77,
-    description: "Draft LinkedIn posts for launches, lessons learned, case studies, hiring updates, and thought leadership.",
+    description: "Generate a ready-to-fill LinkedIn post structure (hook options, body framework, CTA) for launches, lessons learned, case studies, hiring updates, and thought leadership that you complete with your specifics.",
     keywords: ["LinkedIn post generator", "AI LinkedIn post", "professional social media copy"],
     fields: [
       { name: "idea", label: "Post idea", type: "textarea", required: true, placeholder: "Example: What I learned building a tool-first AI website instead of a blog." },
@@ -1209,10 +1209,10 @@ const baseTools: BaseToolDefinition[] = ([
   {
     slug: "product-description-generator",
     name: "Product Description Generator",
-    tagline: "Create product copy from features and audience.",
+    tagline: "Turn features and audience into a product copy framework you finish.",
     category: "creator",
     priority: 76,
-    description: "Turn product features into clear benefits, ecommerce descriptions, landing page copy, and ad angles.",
+    description: "Turn product features into a benefit-led copy framework with ecommerce description structure, landing page copy, and ad angles that you complete with your specifics.",
     keywords: ["product description generator", "ecommerce copy generator", "AI product copy"],
     fields: [
       { name: "product", label: "Product", type: "text", required: true, placeholder: "Example: AI-powered meeting notes app" },
@@ -1228,10 +1228,10 @@ const baseTools: BaseToolDefinition[] = ([
   {
     slug: "newsletter-outline-generator",
     name: "Newsletter Outline Generator",
-    tagline: "Turn a topic into a publishable newsletter structure.",
+    tagline: "Turn a topic into a ready-to-fill newsletter structure you complete.",
     category: "creator",
     priority: 75,
-    description: "Create a newsletter outline with subject lines, intro, sections, examples, links-to-add, and CTA.",
+    description: "Generate a ready-to-fill newsletter outline with subject line options, intro, section prompts, examples to add, links-to-add, and CTA that you complete with your own content.",
     keywords: ["newsletter outline generator", "AI newsletter writer", "email newsletter"],
     fields: [
       { name: "topic", label: "Newsletter topic", type: "text", required: true, placeholder: "Example: 5 AI workflows that saved my team time this week" },

@@ -129,7 +129,33 @@ function aiToolFinder(values: ToolValues): string {
         : "Workflow: individual creator — general, low-friction tools rank higher.";
   const watchOuts = top.slice(0, 3).map(({ tool }) => tool.limitations[0]).filter(Boolean);
 
-  return `# AI Tool Stack Recommendation\n\n${section("Your task", taskRaw || "Describe what you want to accomplish.")}\n\n${topPick ? section("Top pick", `${topPick.name} — ${topPick.strengths[0] ?? "best overall fit for this task"}. Free tier: ${topPick.freeTier}. English fit: ${topPick.englishFit}.`) + "\n\n" : ""}${recommendations}\n\n${section("Budget & workflow fit", `${budgetNote}\n${workflowNote}`)}\n\n${section("Watch-outs", list(watchOuts.length ? watchOuts : ["Free-tier limits and pricing change often — confirm before you commit."]))}\n\n${section("Recommended Workflow", "1. Use 7labs to structure the task and generate a reusable prompt.\n2. Use the top recommended tool for the core output.\n3. Use a second tool only for review, formatting, or platform-specific polish.\n4. Save the winning prompt and turn repeat tasks into a checklist.")}\n\n${section("Copy-ready Prompt", `Act as an AI tools consultant. Recommend the best three tools for this task. Explain best-fit scenario, pricing/free-tier concerns, limitations, and the exact workflow. Task: ${taskRaw}`)}`;
+  const nextStepMap: Record<string, [string, string][]> = {
+    developer: [
+      ["/tools/error-explainer", "decode a stack trace and get a debugging plan"],
+      ["/tools/regex-generator", "draft a tested pattern for parsing or validation"]
+    ],
+    marketing: [
+      ["/tools/youtube-script-generator", "turn the topic into a retention-focused video outline"],
+      ["/tools/linkedin-post-generator", "spin the same idea into a ready-to-post update"]
+    ],
+    research: [
+      ["/tools/pdf-summarizer", "compress a long document into key points"],
+      ["/tools/research-paper-explainer", "get a plain-English breakdown of a paper"]
+    ]
+  };
+  const nextSteps: [string, string][] = [
+    ["/tools/prompt-optimizer", "structure your task into a reusable prompt"],
+    ...(nextStepMap[workflow] ?? [
+      ["/tools/image-prompt-generator", "craft a detailed image prompt for your idea"],
+      ["/tools/youtube-thumbnail-prompt-generator", "design a click-ready thumbnail prompt"]
+    ] as [string, string][])
+  ];
+  const nextStepsBlock = section(
+    "Do this next in 7labs",
+    `These free 7labs tools turn this recommendation into output without leaving the site:\n${list(nextSteps.map(([href, why]) => `[${href.replace("/tools/", "").replace(/-/g, " ")}](${href}) — ${why}`))}`
+  );
+
+  return `# AI Tool Stack Recommendation\n\n${section("Your task", taskRaw || "Describe what you want to accomplish.")}\n\n${topPick ? section("Top pick", `${topPick.name} — ${topPick.strengths[0] ?? "best overall fit for this task"}. Free tier: ${topPick.freeTier}. English fit: ${topPick.englishFit}.`) + "\n\n" : ""}${recommendations}\n\n${section("Budget & workflow fit", `${budgetNote}\n${workflowNote}`)}\n\n${section("Watch-outs", list(watchOuts.length ? watchOuts : ["Free-tier limits and pricing change often — confirm before you commit."]))}\n\n${section("Recommended Workflow", "1. Use 7labs to structure the task and generate a reusable prompt.\n2. Use the top recommended tool for the core output.\n3. Use a second tool only for review, formatting, or platform-specific polish.\n4. Save the winning prompt and turn repeat tasks into a checklist.")}\n\n${section("Copy-ready Prompt", `Act as an AI tools consultant. Recommend the best three tools for this task. Explain best-fit scenario, pricing/free-tier concerns, limitations, and the exact workflow. Task: ${taskRaw}`)}\n\n${nextStepsBlock}`;
 }
 
 const catalogAliases: { match: RegExp; name: string }[] = [
@@ -167,7 +193,7 @@ function comparisonGenerator(values: ToolValues): string {
   const readNote = matched
     ? "Rows for tools in the 7labs catalog use curated strengths and limitations. Always verify current pricing and feature limits on each tool's official site before deciding."
     : "These tools are not in the 7labs catalog, so the table shows a neutral checklist. Run each one on your real task before committing.";
-  return `# AI Tool Comparison\n\n${section("Decision context", task || "Define the specific job you need the tool to do.")}\n\n## Criteria\n${list(criteria)}\n\n## Comparison\n| Tool | Strengths | Watch-outs | Free tier | English fit |\n|---|---|---|---|---|\n${rows}\n\n${section("How to read this", readNote)}\n\n${section("Recommended Decision Process", `1. Run the SAME representative task in every tool.\n2. Score each tool against your criteria: ${criteria.join(", ")}.\n3. Compare output quality, time-to-result, and editing effort.\n4. Check pricing, data privacy, and team sharing before scaling.\n5. Pick one primary tool and one backup, not five overlapping subscriptions.`)}\n\n${section("Copy-ready evaluation prompt", `Act as a neutral AI tools analyst. Compare ${names.join(", ") || "the tools"} for this task: ${task || "[describe the task]"}. For each tool, give best-fit scenario, strengths, limitations, and pricing/free-tier concerns, then a final recommendation with one primary and one backup choice.`)}`;
+  return `# AI Tool Comparison\n\n${section("Decision context", task || "Define the specific job you need the tool to do.")}\n\n## Criteria\n${list(criteria)}\n\n## Comparison\n| Tool | Strengths | Watch-outs | Free tier | English fit |\n|---|---|---|---|---|\n${rows}\n\n${section("How to read this", readNote)}\n\n${section("Recommended Decision Process", `1. Run the SAME representative task in every tool.\n2. Score each tool against your criteria: ${criteria.join(", ")}.\n3. Compare output quality, time-to-result, and editing effort.\n4. Check pricing, data privacy, and team sharing before scaling.\n5. Pick one primary tool and one backup, not five overlapping subscriptions.`)}\n\n${section("Copy-ready evaluation prompt", `Act as a neutral AI tools analyst. Compare ${names.join(", ") || "the tools"} for this task: ${task || "[describe the task]"}. For each tool, give best-fit scenario, strengths, limitations, and pricing/free-tier concerns, then a final recommendation with one primary and one backup choice.`)}\n\n${section("Do this next in 7labs", "Not sure which tools to even compare? Try [ai tool finder](/tools/ai-tool-finder) for a ranked stack, then [prompt optimizer](/tools/prompt-optimizer) to structure the task you will run in each tool.")}`;
 }
 
 function imagePrompt(values: ToolValues): string {

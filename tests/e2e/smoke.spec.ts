@@ -29,29 +29,58 @@ test.describe("launch smoke", () => {
     await expect(page.getByRole("searchbox", { name: "Search tools" })).toBeVisible();
   });
 
-  test("regex generator can load an example, run, and copy output", async ({ page, context }) => {
-    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-    await page.goto("/tools/regex-generator");
-    await page.getByRole("button", { name: "Invoice ID" }).click();
-    await page.getByRole("button", { name: "Generate output" }).click();
+  // Tools spanning the three field-type combinations the runner renders:
+  //   - regex-generator: textarea + select
+  //   - ai-tool-finder: textarea + two selects
+  //   - image-prompt-generator: text + select + select + textarea
+  // exampleLabel is the visible "load example" button; the runner renders Markdown,
+  // so headingText is the executor heading WITHOUT the leading "# ".
+  const runScenarios = [
+    {
+      slug: "regex-generator",
+      exampleLabel: "Invoice IDs",
+      headingText: "Regex Draft",
+      editField: { name: /pattern to match/i, first: "match emails", second: "match phone numbers" }
+    },
+    {
+      slug: "ai-tool-finder",
+      exampleLabel: "YouTube creator stack",
+      headingText: "AI Tool Stack Recommendation",
+      editField: { name: /what do you want to accomplish/i, first: "write blog posts", second: "edit short videos" }
+    },
+    {
+      slug: "image-prompt-generator",
+      exampleLabel: "Landing page hero",
+      headingText: "AI Image Prompt",
+      editField: { name: /main subject/i, first: "a red sports car", second: "a blue mountain bike" }
+    }
+  ] as const;
 
-    await expect(page.locator(".result-box")).toContainText("# Regex Draft");
-    const copyButton = page.getByRole("button", { name: "Copy" });
-    await expect(copyButton).toBeEnabled();
-    await copyButton.click();
-    await expect(page.getByRole("button", { name: "Copied" })).toBeVisible();
-  });
+  for (const scenario of runScenarios) {
+    test(`${scenario.slug} can load an example, run, and copy output`, async ({ page, context }) => {
+      await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+      await page.goto(`/tools/${scenario.slug}`);
+      await page.getByRole("button", { name: scenario.exampleLabel }).click();
+      await page.getByRole("button", { name: "Generate output" }).click();
 
-  test("editing regex input clears stale output", async ({ page }) => {
-    await page.goto("/tools/regex-generator");
-    await page.getByRole("textbox", { name: /pattern to match/i }).fill("match emails");
-    await page.getByRole("button", { name: "Generate output" }).click();
-    await expect(page.locator(".result-box")).toContainText("# Regex Draft");
+      await expect(page.locator(".result-box")).toContainText(scenario.headingText);
+      const copyButton = page.getByRole("button", { name: "Copy" });
+      await expect(copyButton).toBeEnabled();
+      await copyButton.click();
+      await expect(page.getByRole("button", { name: "Copied" })).toBeVisible();
+    });
 
-    await page.getByRole("textbox", { name: /pattern to match/i }).fill("match phone numbers");
-    await expect(page.locator(".result-box")).toHaveCount(0);
-    await expect(page.getByText("Fill out the form to generate a structured result.")).toBeVisible();
-  });
+    test(`${scenario.slug} clears stale output when an input changes`, async ({ page }) => {
+      await page.goto(`/tools/${scenario.slug}`);
+      await page.getByRole("textbox", { name: scenario.editField.name }).fill(scenario.editField.first);
+      await page.getByRole("button", { name: "Generate output" }).click();
+      await expect(page.locator(".result-box")).toContainText(scenario.headingText);
+
+      await page.getByRole("textbox", { name: scenario.editField.name }).fill(scenario.editField.second);
+      await expect(page.locator(".result-box")).toHaveCount(0);
+      await expect(page.getByText("Fill out the form to generate a structured result.")).toBeVisible();
+    });
+  }
 
   test("best page renders guide JSON-LD", async ({ page }) => {
     await page.goto("/best/best-ai-for-coding");

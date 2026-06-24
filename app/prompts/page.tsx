@@ -3,21 +3,57 @@ import Link from "next/link";
 import { ToolGrid } from "@/components/ToolGrid";
 import { promptPages } from "@/lib/promptPages";
 import { tools } from "@/lib/tools";
+import { absoluteUrl, breadcrumbJsonLd, itemListJsonLd, siteImage, siteUrl } from "@/lib/seo";
 
-const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://7labs.org").replace(/\/$/, "");
+const description = "7labs Prompt Studio: copy-ready image prompts, video prompts, Midjourney, Stable Diffusion, product photos, YouTube thumbnails, and prompt optimization.";
 
 export const metadata: Metadata = {
   title: "Prompt Studio",
-  description: "7labs Prompt Studio: image prompts, video prompts, Midjourney, Stable Diffusion, product photos, YouTube thumbnails, and prompt optimization.",
+  description,
   alternates: {
     canonical: `${siteUrl}/prompts`
+  },
+  openGraph: {
+    title: "Prompt Studio | 7labs.org",
+    description,
+    url: `${siteUrl}/prompts`,
+    type: "website",
+    images: [siteImage]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Prompt Studio | 7labs.org",
+    description,
+    images: [siteImage]
   }
 };
 
 export default function PromptsPage() {
   const promptTools = tools.filter((tool) => tool.category === "prompt");
+  const pageUrl = absoluteUrl("/prompts");
+  const breadcrumbSchema = breadcrumbJsonLd([
+    { name: "Home", url: absoluteUrl("/") },
+    { name: "Prompt Studio", url: pageUrl }
+  ]);
+  const listSchema = itemListJsonLd({
+    url: pageUrl,
+    name: "Prompt libraries",
+    items: promptPages.map((page) => ({
+      name: page.title,
+      url: absoluteUrl(`/prompts/${page.slug}`),
+      description: page.metaDescription
+    }))
+  });
   return (
     <div className="container">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(listSchema) }}
+      />
       <section className="page-hero">
         <div className="kicker">Prompt Studio</div>
         <h1>Get the prompt right before you pay for generation.</h1>
