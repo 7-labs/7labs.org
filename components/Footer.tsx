@@ -11,6 +11,7 @@ export function Footer() {
         <Link href="/tools">Tools</Link>
         <Link href="/best">Best AI</Link>
         <Link href="/compare">Compare</Link>
+        <Link href="/prompts">Prompts</Link>
         <Link href="/models">Models</Link>
         <Link href="/privacy">Privacy</Link>
         <Link href="/terms">Terms</Link>

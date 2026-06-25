@@ -6,7 +6,9 @@ import { PromptExampleList } from "@/components/PromptExampleList";
 import { ToolRunner } from "@/components/ToolRunner";
 import { getPromptPage, promptPages } from "@/lib/promptPages";
 import { getTool } from "@/lib/tools";
-import { absoluteUrl, breadcrumbJsonLd, itemListJsonLd, siteUrl } from "@/lib/seo";
+import { getBestPage } from "@/lib/bestPages";
+import { getComparePage } from "@/lib/comparePages";
+import { absoluteUrl, articleJsonLd, breadcrumbJsonLd, itemListJsonLd, siteUrl } from "@/lib/seo";
 
 type PromptPageProps = {
   params: Promise<{ slug: string }>;
@@ -52,6 +54,8 @@ export default async function PromptLibraryPage({ params }: PromptPageProps) {
   if (!tool) notFound();
   const pageUrl = absoluteUrl(`/prompts/${page.slug}`);
   const relatedPages = page.relatedSlugs.map(getPromptPage).filter((item): item is NonNullable<ReturnType<typeof getPromptPage>> => Boolean(item));
+  const relatedBestPages = (page.relatedBestSlugs ?? []).map(getBestPage).filter((item): item is NonNullable<ReturnType<typeof getBestPage>> => Boolean(item));
+  const relatedComparePages = (page.relatedCompareSlugs ?? []).map(getComparePage).filter((item): item is NonNullable<ReturnType<typeof getComparePage>> => Boolean(item));
   const sample = tool.exampleRuns[0];
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -78,12 +82,23 @@ export default async function PromptLibraryPage({ params }: PromptPageProps) {
       description: example.notes
     }))
   });
+  const articleSchema = articleJsonLd({
+    url: pageUrl,
+    title: page.title,
+    description: page.metaDescription,
+    lastReviewed: page.lastReviewed,
+    type: "Article"
+  });
 
   return (
     <div className="container">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
       <script
         type="application/ld+json"
@@ -102,14 +117,34 @@ export default async function PromptLibraryPage({ params }: PromptPageProps) {
         <div className="kicker">Prompt Library</div>
         <h1>{page.title}</h1>
         <p>{page.intro}</p>
-        <p className="meta-line">Last reviewed: {page.lastReviewed}. Use the generator first, then copy a curated example when you need a faster starting point.</p>
+        <p className="meta-line">Last reviewed: {page.lastReviewed}. This is a copy-ready prompt library: start from a curated example, then open the generator below when you need a fully custom prompt.</p>
         <div className="hero-actions">
-          <a className="primary-button" href="#try">Generate a prompt</a>
-          <a className="secondary-button" href="#examples">Browse examples</a>
+          <a className="primary-button" href="#examples">Browse copy-ready examples</a>
+          <a className="secondary-button" href="#try">Generate a custom prompt</a>
         </div>
       </section>
 
-      <ToolRunner tool={tool} />
+      <section className="section" id="examples">
+        <div className="section-head">
+          <div>
+            <div className="section-kicker">Curated Examples</div>
+            <h2>Copy-ready prompt examples</h2>
+            <p>These examples are complete enough to paste into an image or video model, then tune for the exact provider. Copy one as a starting point before generating your own.</p>
+          </div>
+        </div>
+        <PromptExampleList examples={page.examples} pageSlug={page.slug} />
+      </section>
+
+      <section className="section" id="try">
+        <div className="section-head">
+          <div>
+            <div className="section-kicker">Generator</div>
+            <h2>Need a custom prompt? Generate one</h2>
+            <p>When the curated examples are close but you need your own subject, audience, platform, or shot constraints, run the generator to build a fresh prompt.</p>
+          </div>
+        </div>
+        <ToolRunner tool={tool} />
+      </section>
 
       <section className="section detail-grid">
         <article className="article-card">
@@ -137,17 +172,6 @@ export default async function PromptLibraryPage({ params }: PromptPageProps) {
         </article>
       </section>
 
-      <section className="section" id="examples">
-        <div className="section-head">
-          <div>
-            <div className="section-kicker">Curated Examples</div>
-            <h2>Copy-ready prompt examples</h2>
-            <p>These examples are complete enough to paste into an image or video model, then tune for the exact provider.</p>
-          </div>
-        </div>
-        <PromptExampleList examples={page.examples} pageSlug={page.slug} />
-      </section>
-
       <section className="section article-grid">
         <article className="article-card">
           <div className="section-kicker">Tips</div>
@@ -168,6 +192,21 @@ export default async function PromptLibraryPage({ params }: PromptPageProps) {
           </div>
         </article>
       </section>
+
+      {(relatedBestPages.length > 0 || relatedComparePages.length > 0) ? (
+        <section className="section article-card">
+          <div className="section-kicker">Decision Support</div>
+          <h2>Related guides and comparisons</h2>
+          <div className="link-row">
+            {relatedBestPages.map((bestPage) => (
+              <Link className="ghost-button" href={`/best/${bestPage.slug}`} key={bestPage.slug}>{bestPage.title}</Link>
+            ))}
+            {relatedComparePages.map((comparePage) => (
+              <Link className="ghost-button" href={`/compare/${comparePage.slug}`} key={comparePage.slug}>{comparePage.title}</Link>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="section article-card">
         <div className="section-kicker">FAQ</div>

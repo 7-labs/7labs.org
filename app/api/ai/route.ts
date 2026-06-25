@@ -58,7 +58,11 @@ async function readBody(request: NextRequest): Promise<AiBody> {
     throw new Error("body-too-large");
   }
   if (!text.trim()) return {};
-  return JSON.parse(text) as AiBody;
+  const parsed = JSON.parse(text);
+  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+    throw new Error("invalid-payload");
+  }
+  return parsed as AiBody;
 }
 
 function enabled(value: string | undefined): boolean {
@@ -92,9 +96,7 @@ export async function POST(request: NextRequest) {
   if (provider === "none") {
     return NextResponse.json({
       provider: "none",
-      text: `AI_PROVIDER=none. This public launch uses local rule-based tools only. To enable model-assisted output, set AI_PROVIDER plus AI_GATEWAY_ENABLED=true after auth, quotas, caching, rate limits, and spend alerts are configured.
-
-Received prompt preview: ${(prompt || "").slice(0, 500)}`
+      text: `AI_PROVIDER=none. This public launch uses local rule-based tools only. To enable model-assisted output, set AI_PROVIDER plus AI_GATEWAY_ENABLED=true after auth, quotas, caching, rate limits, and spend alerts are configured.`
     });
   }
 
@@ -153,7 +155,12 @@ Received prompt preview: ${(prompt || "").slice(0, 500)}`
     if (!response.ok) {
       return providerFailure(response.status);
     }
-    const json = await response.json();
+    let json: { choices?: Array<{ message?: { content?: string } }> };
+    try {
+      json = await response.json();
+    } catch {
+      return jsonError("provider_bad_response", "AI provider returned a non-JSON response", 502);
+    }
     const text = truncateText(json.choices?.[0]?.message?.content ?? "", MAX_RESPONSE_CHARS);
     return NextResponse.json({ provider, model, text });
   }
@@ -181,7 +188,12 @@ Received prompt preview: ${(prompt || "").slice(0, 500)}`
     if (!response.ok) {
       return providerFailure(response.status);
     }
-    const json = await response.json();
+    let json: { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
+    try {
+      json = await response.json();
+    } catch {
+      return jsonError("provider_bad_response", "AI provider returned a non-JSON response", 502);
+    }
     const text = truncateText(json.candidates?.[0]?.content?.parts?.map((part: { text?: string }) => part.text ?? "").join("") ?? "", MAX_RESPONSE_CHARS);
     return NextResponse.json({ provider, model, text });
   }

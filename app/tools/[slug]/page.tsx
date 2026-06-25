@@ -73,8 +73,8 @@ export default async function ToolPage({ params }: ToolPageProps) {
         : "You can try the core features now. Long inputs, history, batch export, and premium models are good candidates for a paid tier."
     },
     {
-      question: "Does this tool call an external AI model?",
-      answer: "Not by default. When AI_PROVIDER=none, the tool uses the local rule engine. Provider-backed generation should only be enabled after quotas, caching, rate limits, and spend controls are configured."
+      question: `Can I use the ${tool.name} without signing up?`,
+      answer: `Yes. The ${tool.name} runs locally in your browser with no account or API key while AI_PROVIDER=none, so you can ${lowerFirst(tool.primaryIntent).replace(/\.$/, "")} without creating a login.`
     },
     {
       question: `What are the current limits of the ${tool.name}?`,
